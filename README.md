@@ -1,1 +1,1 @@
-source for [2λ.com](https://2λ.com)
+source for [g4.com](https://g4.com)
