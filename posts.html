@@ -1,0 +1,14 @@
+---
+layout: default
+title: Explore
+permalink: /posts/
+---
+
+<div id="second">
+<h2>All Posts</h2>
+<ul>
+{% for post in collections.posts %}
+<li><a href="{{ post.url }}">{{ post.data.title }}</a> ({{ post.date | date: "%Y-%m-%d" }})</li>
+{% endfor %}
+</ul>
+</div>

@@ -1,0 +1,31 @@
+---
+layout: default
+---
+
+<div id="blog">
+<h2>{{ title }}</h2>
+<div class="post">Published {{ date | date: "%B %d, %Y" }}</div>
+
+{{ content }}
+
+<p><a href="/">&larr; back home</a></p>
+
+<hr style="display:block; border:0; border-top:1px solid var(--header-border); margin:2em 0;">
+
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="g4titanx/blog"
+        data-repo-id=""
+        data-category="Comments"
+        data-category-id=""
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="dark"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+</div>

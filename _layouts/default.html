@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>{% if title %}{{ title }} - {% endif %}g4titan's blog</title>
+<link rel="alternate" type="application/rss+xml" title="g4titan's blog" href="/feed.xml">
+<link rel="stylesheet" type="text/css" href="/assets/css/screen.css" media="screen">
+<link rel="stylesheet" type="text/css" href="/assets/css/code.css" media="screen">
+<link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css" media="screen">
+</head>
+<body id="www-bittorrent-org">
+<div id="upper" class="clear">
+<div id="wrap">
+<div id="header">
+<h1><a href="/">g4titan<span>.blog</span></a></h1>
+</div>
+<button id="theme-toggle" aria-label="Toggle dark mode">dark</button>
+<div id="nav">
+<ul>
+{% if page.url == "/" %}
+<li><span>Home</span></li>
+{% else %}
+<li><a href="/">Home</a></li>
+{% endif %}
+
+{% if page.url == "/library/" %}
+<li><span>Library</span></li>
+{% else %}
+<li><a href="/library/">Library</a></li>
+{% endif %}
+
+
+
+</ul>
+</div>
+
+{{ content }}
+</div>
+</div>
+
+<div id="footer">
+<hr>
+<p>Design inspired by <a href="https://www.bittorrent.org/">BitTorrent.org</a></p>
+</div>
+<script>
+(function(){
+  var b = document.documentElement;
+  var t = document.getElementById('theme-toggle');
+  var saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    b.removeAttribute('data-theme');
+    t.textContent = 'dark';
+  } else {
+    t.textContent = 'light';
+  }
+  t.addEventListener('click', function(){
+    var current = b.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    if (next === 'light') {
+      b.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+    } else {
+      b.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
+    t.textContent = next === 'dark' ? 'light' : 'dark';
+  });
+})();
+</script>
+</body>
+</html>

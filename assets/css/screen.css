@@ -1,0 +1,362 @@
+/*
+   BitTorrent.org Screen CSS
+   2006 Apr 6, bri
+*/
+
+:root {
+    --bg:#fff;
+    --fg:#333;
+    --fg-muted:#666;
+    --fg-intro:#000;
+    --link:#345;
+    --link-visited:#678;
+    --link-hover:#f60;
+    --header-border:#eee;
+    --link-border:#eee;
+    --h1-link:#666;
+    --h2-border:#e0c860;
+    --accent:#09f;
+    --code:#963;
+    --post-meta:#999;
+    --shade:#eee;
+    --nav-active:#f60;
+    --vr-1:0.4em;
+    --vr-2:0.8em;
+    --vr-3:1.2em;
+    --vr-4:1.6em;
+    }
+
+[data-theme="dark"] {
+    --bg:#1a1a1a;
+    --fg:#ccc;
+    --fg-muted:#999;
+    --fg-intro:#ddd;
+    --link:#7ab;
+    --link-visited:#8a9;
+    --link-hover:#f80;
+    --header-border:#333;
+    --link-border:#333;
+    --h1-link:#aaa;
+    --h2-border:#554400;
+    --accent:#1af;
+    --code:#c96;
+    --post-meta:#777;
+    --shade:#262626;
+    --nav-active:#f80;
+    }
+
+body {
+	margin:0;
+	padding:0;
+	color:var(--fg);
+	background-color:var(--bg);
+	font:10px/1.5em "Trebuchet MS",sans-serif;
+	text-align:center;
+	}
+    
+#upper {
+    margin:0;
+    padding:60px 0;
+    background:var(--bg);
+    }
+    
+#wrap {	
+	margin:0 auto;
+	width:700px;
+	text-align:left; 
+	}
+	
+#header {
+    margin:0;
+	width:100%;
+	border-bottom:2px solid var(--header-border);
+	}
+	
+#nav {
+    margin:0 0 40px 0;
+    padding:.5em 0;
+    text-align:center;
+    }
+
+#nav ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+    }
+
+#nav li {
+    margin-left:1em;
+    padding:0;
+    display:inline;
+    font-size:1.5em;
+    font-weight:bold;
+    }
+
+#nav li span {
+    color:var(--nav-active);
+    }
+
+#home-l ul,
+#home-c ul,
+#home-r ul {
+    margin:0 0 1.5em 0;
+	padding:0 0 10px 2px;
+    }
+
+#home-l li,
+#home-c li,
+#home-r li {
+	list-style-type:none;
+	margin:1em 0;
+	padding:0 0 0 25px;
+    font-size:1.5em;
+    line-height:1.2em;
+    background:url("../img/li.gif") no-repeat 0 0; 
+    }
+
+#second li,
+#second dt,
+#blog li {
+	margin:.4em 0;
+    font-size:10pt;
+    line-height:12pt;
+    }
+
+#second dd {
+    margin-bottom:7px;
+    font-size:1.2em;
+    line-height:1.5em;
+    }
+
+#intro {
+    margin:0 0 2.5em 0;
+    padding:0 3em;
+    font-size:2.5em;
+    line-height:1.2em;
+    color:var(--fg-intro);
+    }
+
+#footer {
+    margin:0;
+    padding:0;
+    height:60px;
+    background:var(--bg);
+    }
+
+#home-l,
+#home-c,
+#home-r {
+    margin:0 10px;
+    width:210px;
+    float:left;
+    }
+	
+#blog {
+    padding:0 7em;
+    }
+
+h1 {
+    margin:.3em 0;
+    font-size:3em;
+    font-weight:normal;
+    letter-spacing:-1px;
+    }
+
+h1 span {
+    font-weight:bold;
+    color:var(--accent);
+    }
+
+h2 {
+    margin:0;
+    padding:0 0 .5em 0;
+    font-size:1.7em;
+    border-bottom:2px solid var(--h2-border);
+    }
+
+#second h2,
+#blog h2 {
+    margin:0 0 var(--vr-2) 0;
+    padding:0;
+    font-size:2em;
+    line-height:1.25em;
+    font-weight:normal;
+    border:0;
+    }
+
+#second h2:not(:first-child),
+#blog h2:not(:first-child) {
+    margin-top:3em;
+    }
+
+#second h2,
+#blog h2 {
+    border-bottom:2px solid var(--h2-border);
+    padding-bottom:.3em;
+    }
+
+h3 {
+    font-size:1.5em;
+    line-height:1.5em;
+    }
+
+h4 {
+    font-size:1.2em;
+    text-transform:uppercase;
+    }
+
+h5 {
+    font-size:1.2em;
+    color:var(--fg-muted);
+    }
+
+#second p,
+#blog p {
+    font-size:1.3em;
+    line-height:1.5em;
+    margin:var(--vr-2) 0;
+    }
+
+#second .social-links {
+    margin-top:2em;
+    }
+
+#second h3,
+#blog h3 {
+    margin:var(--vr-3) 0 var(--vr-1) 0;
+    line-height:1.3em;
+    }
+
+#footer p {
+    margin:0;
+    padding:2em 0;
+    color:var(--fg);
+    }
+
+table {
+    border:0;
+    }
+
+td {
+    font-size:9pt;
+    padding:10px;
+    }
+
+td.shade {
+    background-color:var(--shade);
+    }
+
+#blog .post {
+    margin:0 0 var(--vr-3) 0;
+    padding:var(--vr-1) 0 0;
+    border-top:0;
+    font-size:1em;
+    color:var(--post-meta);
+    }
+
+#blog ul,
+#blog ol,
+#second ul,
+#second ol,
+#blog pre,
+#second pre,
+#blog blockquote,
+#second blockquote {
+    margin:var(--vr-2) 0 var(--vr-3) 0;
+}
+
+.clear:after {
+	content:".";
+	display:block;
+	height:0;
+	font-size:0;
+	clear:both;
+	visibility:hidden; 
+	}
+	
+.clear {
+    display:inline-table; 
+    }
+
+/* \*/
+* html .clear { 
+    height:1%; 
+    }
+
+.clear {
+    display:block; 
+    }
+/* */
+
+.img-r {
+    float:right;
+    width:300px;
+    padding-bottom:10px;
+    margin:0 0 0 20px;
+    }
+
+.img-l {
+    float:left;
+    width:300px;
+    padding-bottom:10px;
+    margin:0 20px 0 0;
+    }
+
+#second .img-l p,
+#second .img-r p {
+    color:var(--accent);
+    font-size:1.5em;
+    text-align:center;
+    }
+
+hr { 
+    display:none; 
+    }
+
+code {
+    color:var(--code);
+    }
+
+/* links */
+
+a {
+	color:var(--link);
+	text-decoration:none;
+	border-bottom:1px solid var(--link-border);
+	}
+
+a:visited {
+	color:var(--link);
+	}
+
+#nav a:visited {
+    color:var(--link);
+    }
+
+a:hover,
+#nav a:hover {
+    color:var(--link-hover);
+	}
+
+h1 a,
+h1 a:visited,
+h1 a:hover {
+    color:var(--h1-link);
+    border:0;
+    }
+
+a img {
+	border:0;
+	}
+
+#theme-toggle {
+    background:none;
+    border:1px solid var(--header-border);
+    color:var(--fg);
+    font:inherit;
+    font-size:1.3em;
+    cursor:pointer;
+    padding:2px 8px;
+    float:right;
+    margin-top:-2.5em;
+    }

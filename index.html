@@ -1,0 +1,60 @@
+---
+layout: default
+title: Home
+---
+
+<div id="intro">
+<p id="tagline"></p>
+</div>
+<script>
+(function(){
+  var text = "r & d";
+  var el = document.getElementById("tagline");
+  var i = 0;
+  function type(){
+    if(i <= text.length){
+      el.textContent = text.slice(0, i) + "_";
+      i++;
+      setTimeout(type, 150);
+    } else {
+      var on = true;
+      setInterval(function(){
+        el.textContent = text + (on ? "_" : "");
+        on = !on;
+      }, 500);
+    }
+  }
+  type();
+})();
+</script>
+
+<div id="second">
+<h2>Posts</h2>
+{% for post in collections.posts %}
+<p><a href="{{ post.url }}">{{ post.data.title }}</a> ({{ post.date | date: "%Y-%m-%d" }})</p>
+{% endfor %}
+{% if collections.posts.size == 0 %}
+<p>No posts yet.</p>
+{% endif %}
+
+<h2>WIP</h2>
+<p><a href="https://github.com/MiragePrivacy/Azoth/">Azoth</a> a deterministic EVM bytecode obfuscator for <a href="https://x.com/mirageprivacy">@mirageprivacy</a></p>
+<p>Ootokan, a single and verifiable source of truth for all information regarding NIgeria</p>
+<p>Word per minute</p>
+
+<h2>Next (in no order)</h2>
+<p>A pedersen hash library in rust</p>
+<p>Build a compiler/interpreter (rite of passage)</p>
+<p>A terminal game that emulates LOTR Kingdom of Moria entrance scene</p>
+<p>Operating system</p>
+<p>Terry Davis's <a href="https://www.youtube.com/watch?v=ZXn4njGgfkE">Moses Game</a> with unity</p>
+<p>A ascii generating website with assembly</p>
+<p>Some kind of robot, i need to get a 3D printer i suppose</p>
+
+<p class="social-links">
+<a href="https://x.com/g4titan_">X</a> &middot;
+<a href="https://github.com/g4titanx">GitHub</a> &middot;
+<a href="mailto:g4titan1@gmail.com">Mail</a> &middot;
+<a href="/feed.xml">RSS</a>
+</p>
+</div>
