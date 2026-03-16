@@ -1,0 +1,24 @@
+/*
+  Custom Giscus theme to match g4titan.com
+*/
+main {
+  --color-canvas-default: #1a1a1a;
+  --color-canvas-subtle: #262626;
+  --color-border-default: #333;
+  --color-border-muted: #333;
+  --color-neutral-muted: rgba(110,118,129,0.4);
+  --color-accent-fg: #7ab;
+  --color-accent-emphasis: #7ab;
+  --color-fg-default: #ccc;
+  --color-fg-muted: #999;
+  --color-fg-subtle: #777;
+  --color-btn-bg: #262626;
+  --color-btn-border: #333;
+  --color-btn-hover-bg: #333;
+  --color-btn-hover-border: #444;
+  --color-btn-active-bg: #333;
+  --color-btn-primary-bg: #7ab;
+  --color-btn-primary-border: #7ab;
+  --color-btn-primary-hover-bg: #8bc;
+  --color-btn-primary-hover-border: #8bc;
+}
