@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Sparsity of the Ethereum Virtual Machine Context Vector and its Consequences for Obfuscation"
-date: 2026-06-11
+date: 2025-06-11
 ---
 
 ## What this article is about
