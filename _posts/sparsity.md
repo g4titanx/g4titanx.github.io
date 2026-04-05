@@ -4,8 +4,6 @@ title: "Sparsity of the Ethereum Virtual Machine Context Vector and its Conseque
 date: 2025-06-11
 ---
 
-## What this article is about
-
 The EVM gives every smart contract access to a massive state space: a 1024-slot stack, virtually unlimited memory, and $2^{256}$ storage keys. But in practice, a typical transaction touches maybe 16 stack slots, a kilobyte of memory, and a hundred storage keys. The rest sits empty.
 
 This article puts a number on that gap. We define **sparsity** — a measure of how little of the available state a program actually uses — and show that for real smart contracts, that number is absurdly close to zero. Simply put, $\rho = \frac{\text{used}}{\text{available}}$, so $\rho \approx 0$ means you barely touched anything, and almost the entire EVM state goes unused during execution. Then we explain why that matters: all that untouched state is free real estate for obfuscation. You can inject fake operations that read and write to places the real program never looks, making reverse engineering harder without changing what the contract actually does.
