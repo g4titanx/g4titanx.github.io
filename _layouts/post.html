@@ -3,29 +3,12 @@ layout: default
 ---
 
 <div id="blog">
+<header class="post-header">
 <h2>{{ title }}</h2>
-<div class="post">Published {{ date | date: "%B %d, %Y" }}</div>
+<div class="post-meta">Published {{ date | date: "%B %d, %Y" }}</div>
+</header>
 
 {{ content }}
 
 <p><a href="/">&larr; back home</a></p>
-
-<hr style="display:block; border:0; border-top:1px solid var(--header-border); margin:2em 0;">
-
-<h3>Comments</h3>
-<script src="https://giscus.app/client.js"
-        data-repo="g4titanx/g4titanx.github.io"
-        data-repo-id="R_kgDORnShgg"
-        data-category="General"
-        data-category-id="DIC_kwDORnShgs4C4gLF"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="https://g4titan.com/assets/css/giscus.css"
-        data-lang="en"
-        crossorigin="anonymous"
-        async>
-</script>
 </div>
