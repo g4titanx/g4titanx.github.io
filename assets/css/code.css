@@ -41,6 +41,7 @@ pre {
     }
 
 :not(pre) > code {
+    font-size:0.9025em;
     padding:.1em .3em;
     border-radius:.3em;
     }
@@ -67,6 +68,7 @@ pre[class*="language-"] {
     }
 
 :not(pre) > code[class*="language-"] {
+    font-size:0.9025em;
     padding:.1em .3em;
     border-radius:.3em;
     background:var(--code-bg);
