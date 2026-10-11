@@ -4,8 +4,6 @@ title: "Sparsity of the Ethereum Virtual Machine Context Vector and Its Conseque
 date: 2025-06-11
 ---
 
-[github.com/g4titanx](https://github.com/g4titanx)
-
 ## Abstract
 
 An Ethereum Virtual Machine (EVM) execution accesses only a subset of the stack, memory, and storage locations available to it. This paper formalizes that observation as a trace-level sparsity measure. We define a finite projection of the EVM context, characterize the resources accessed during a call-frame execution, and derive a conditional upper bound on the resulting sparsity ratio. We then examine the relevance of unused resources to bytecode obfuscation. The bound identifies candidate resources for transformations, but it does not establish behavioral equivalence: gas consumption, persistent storage, code-dependent behavior, and execution paths outside the observed trace require separate analysis.
