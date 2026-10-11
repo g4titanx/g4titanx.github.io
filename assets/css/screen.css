@@ -115,11 +115,16 @@ body {
     }
 
 #second li,
-#second dt,
-#blog li {
+#second dt {
 	margin:.4em 0;
     font-size:10pt;
     line-height:12pt;
+    }
+
+#blog li {
+    margin:.4em 0;
+    font-size:1.3em;
+    line-height:1.5em;
     }
 
 #second dd {
@@ -153,6 +158,21 @@ body {
 	
 #blog {
     padding:0 7em;
+    }
+
+.media-page video {
+    display:block;
+    max-width:100%;
+    height:auto;
+    }
+
+.media-page iframe {
+    display:block;
+    width:100%;
+    height:80vh;
+    min-height:600px;
+    box-sizing:border-box;
+    border:1px solid var(--header-border);
     }
 
 #blog .post-header {
@@ -223,6 +243,20 @@ h5 {
     font-size:1.3em;
     line-height:1.5em;
     margin:var(--vr-2) 0;
+    }
+
+#second .home-quote {
+    margin:0 0 var(--vr-2) 0;
+    }
+
+#second .home-quote + h2 {
+    margin-top:0;
+    }
+
+#blog li p {
+    font-size:inherit;
+    line-height:inherit;
+    margin:0;
     }
 
 #second .social-links {

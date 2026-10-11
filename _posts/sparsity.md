@@ -1,165 +1,187 @@
 ---
 layout: post
-title: "Sparsity of the Ethereum Virtual Machine Context Vector and its Consequences for Obfuscation"
+title: "Sparsity of the Ethereum Virtual Machine Context Vector and Its Consequences for Obfuscation"
 date: 2025-06-11
 ---
 
-The EVM gives every smart contract access to a massive state space: a 1024-slot stack, virtually unlimited memory, and $2^{256}$ storage keys. But in practice, a typical transaction touches maybe 16 stack slots, a kilobyte of memory, and a hundred storage keys. The rest sits empty.
+[github.com/g4titanx](https://github.com/g4titanx)
 
-This article puts a number on that gap. We define **sparsity** — a measure of how little of the available state a program actually uses — and show that for real smart contracts, that number is absurdly close to zero. Simply put, $\rho = \frac{\text{used}}{\text{available}}$, so $\rho \approx 0$ means you barely touched anything, and almost the entire EVM state goes unused during execution. Then we explain why that matters: all that untouched state is free real estate for obfuscation. You can inject fake operations that read and write to places the real program never looks, making reverse engineering harder without changing what the contract actually does.
+## Abstract
 
-**Key terms:**
+An Ethereum Virtual Machine (EVM) execution accesses only a subset of the stack, memory, and storage locations available to it. This paper formalizes that observation as a trace-level sparsity measure. We define a finite projection of the EVM context, characterize the resources accessed during a call-frame execution, and derive a conditional upper bound on the resulting sparsity ratio. We then examine the relevance of unused resources to bytecode obfuscation. The bound identifies candidate resources for transformations, but it does not establish behavioral equivalence: gas consumption, persistent storage, code-dependent behavior, and execution paths outside the observed trace require separate analysis.
 
-- **Context vector** — the full set of resources the EVM makes available (stack, memory, storage, program counter, gas, etc.).
-- **Support** — the subset of those resources that a program actually reads or writes during execution.
-- **Sparsity ratio** — support size divided by total context size. A tiny ratio means the program barely touches the available state.
+## Introduction
 
-## Definition (Sparsity)
+The EVM provides a stack of up to 1024 words, byte-addressed memory, and storage indexed by 256-bit keys [[1]](https://ethereum.github.io/yellowpaper/paper.pdf). A particular execution generally accesses only a subset of these resources. This disparity suggests a question relevant to program transformation: can resources unused by the original program be used to introduce additional computation without changing its behavior?
 
-Let $X$ be an index set and let $v : X \to \mathbb{R}$ be a vector-like map.  
-The **support** of $v$ is
+To examine that question, this paper separates two claims. The first is quantitative: a given execution may touch a small fraction of a defined resource space. The second is semantic: using resources outside that execution's support preserves program behavior. The quantitative claim can be established from a trace and explicit resource bounds. The semantic claim requires additional conditions and cannot be inferred from sparsity alone.
 
-$$
-\operatorname{supp}(v) = \{x \in X \mid v(x) \neq 0\}.
-$$
+## Execution Model and Resource Space
 
-If $X$ is finite, the **sparsity ratio** is
+Consider a single EVM call-frame execution
 
 $$
-\rho(v) = \frac{|\operatorname{supp}(v)|}{|X|}.
+\pi =
+\left(
+\sigma_0
+\xrightarrow{o_0}
+\sigma_1
+\xrightarrow{o_1}
+\cdots
+\xrightarrow{o_{T-1}}
+\sigma_T
+\right),
 $$
 
-We call $v$ **sparse** when $\rho(v) \ll 1$ (equivalently, when only a small fraction of indices are active/non-zero).
+where $\sigma_t$ is the machine state before instruction $o_t$.
 
-In this article, $X$ will correspond to the EVM context-index set $\mathcal{C}$.
-
-## Architected context of the EVM
-
-$$
-\begin{aligned}
-\mathcal{C} &=
-\underbrace{\{\mathrm{PC}, \mathrm{GAS}, \mathrm{HLT}\}}_{\text{control}} \\
-&\cup \{S_i \mid 0 \le i < 1024\} \\
-&\cup \{M_b \mid b \in \mathbb{N}\} \\
-&\cup \{K_a \mid a \in \mathbb{B}^{256}\} \\
-&\cup \mathcal{E}
-\end{aligned}
-$$
-
-Each resource $r \in \mathcal{C}$ holds a value in $\mathbb{B}^{\le 256}$ (one byte or one 256-bit word, depending on the class).
-
-## Dynamic usage indicator
-
-For a concrete execution trace:
-
-$$
-\pi = \left(\sigma_0 \xrightarrow{o_0} \sigma_1 \xrightarrow{o_1} \cdots \xrightarrow{o_{T-1}} \sigma_T\right).
-$$
-
-define the Boolean function:
+Although EVM memory is unbounded in the abstract model, a finite execution accesses only finitely many memory words. Choose $B$ such that all memory accesses in $\pi$ fall within words indexed from $0$ to $B-1$. Define the projected context index set
 
 $$
 \begin{aligned}
-u_P(t,r) &=
-\begin{cases}
-1 & \text{if transition } \sigma_t \xrightarrow{o_t} \sigma_{t+1} \text{ reads or writes } r,\\
-0 & \text{otherwise},
-\end{cases} \\
-u_P &: [0,T)\times\mathcal{C} \longrightarrow \{0,1\}.
+\mathcal{C}_B
+={}&
+\{\mathrm{PC},\mathrm{GAS},\mathrm{STATUS}\}
+\\
+&\uplus \{S_i \mid 0 \leq i < 1024\}
+\\
+&\uplus \{M_j \mid 0 \leq j < B\}
+\\
+&\uplus \{K_a \mid a \in \{0,1\}^{256}\}.
 \end{aligned}
 $$
 
-The support set of program $P$ over the whole run is:
+Here, $S_i$ denotes a stack position, $M_j$ denotes a 32-byte memory word, and $K_a$ denotes a storage key. A memory word counts as accessed if any byte within it is read or written. The disjoint union ensures that resources of different classes remain distinct even when they share a numerical index.
+
+The set $\mathcal{C}_B$ is a projection chosen for analysis. It does not contain every component of EVM or transaction state that may affect observable behavior.
+
+## Execution Support and Sparsity
+
+For each transition $t$, let $I_t \subseteq \mathcal{C}_B$ contain the projected resources read or written by that transition. Define the *execution support*
 
 $$
-U_P = \{r\in\mathcal{C} \mid \exists\,t<T:\;u_P(t,r)=1\}.
+U_\pi = \bigcup_{t=0}^{T-1} I_t.
 $$
 
-## Empirical bounds (2025 main-net corpus)
-
-| Resource class | Architectural limit | Observed upper bound in practice |
-|---|---:|---|
-| Stack words $S_i$ | $1024$ | $\le 16$ live slots per frame (Solidity's "stack-too-deep" compiler limit) |
-| Memory bytes $M_b$ | unbounded | $\lesssim 1\,\text{kB}$ per call; expansion costs quadratic gas after $b\approx 724\,\text{B}$, so contracts avoid it |
-| Storage words $K_a$ | $2^{256}$ | $\lesssim 10^2$ distinct keys touched in a transaction; each `SSTORE` costs $\ge 20{,}000$ gas |
-
-Conservative numeric caps for one transaction are therefore:
+Since $\mathcal{C}_B$ is finite, the *sparsity ratio* of $\pi$ is well-defined:
 
 $$
-d_{\text{stack}}=32,\quad
-d_{\text{mem}}=2^{10}\text{ bytes},\quad
-d_{\text{stor}}=10^{2}\text{ keys}.
+\rho_B(\pi)
+=
+\frac{|U_\pi|}{|\mathcal{C}_B|}.
 $$
 
-## Average live-resource count
-
-Define:
+Let $s_\pi$, $m_\pi$, and $k_\pi$ be the numbers of distinct stack positions, memory words, and storage keys in $U_\pi$, respectively. Let $q_\pi\leq 3$ be the number of projected control resources in $U_\pi$. Then
 
 $$
-c_{\text{live}}(t)=\sum_{r\in\mathcal{C}} u_P(t,r),
-\qquad
-\bar{c}_{\text{live}}=\frac1T \sum_{t=0}^{T-1} c_{\text{live}}(t).
+|U_\pi|
+=
+s_\pi+m_\pi+k_\pi+q_\pi.
 $$
 
-With the empirical caps above:
+**Proposition (Conditional sparsity bound).** For any execution $\pi$ whose memory accesses lie within the chosen $B$-word window,
 
 $$
-\bar{c}_{\text{live}}
-\le d_{\text{stack}} + \frac{d_{\text{mem}}}{32} + d_{\text{stor}} + 3
-< 170.
+\rho_B(\pi)
+=
+\frac{s_\pi+m_\pi+k_\pi+q_\pi}
+    {1024+B+2^{256}+3}.
 $$
 
-## Formal sparsity bound
-
-### Lemma (Sparsity ratio)
-
-Let
+If $s_\pi\leq s$, $m_\pi\leq m$, and $k_\pi\leq k$, then
 
 $$
-\rho_P = \frac{\lvert U_P\rvert}{\lvert\mathcal{C}\rvert}.
+\rho_B(\pi)
+\leq
+\frac{s+m+k+3}{1024+B+2^{256}+3}
+<
+\frac{s+m+k+3}{2^{256}}.
 $$
 
-Then
+**Proof.** The resource classes in $\mathcal{C}_B$ are disjoint. Their cardinalities therefore add:
 
 $$
-\rho_P < 170 / 2^{256}.
+|\mathcal{C}_B|=1024+B+2^{256}+3.
 $$
 
-**Proof.** The architected context size is dominated by storage keys:
+The same holds for their intersections with $U_\pi$, giving
 
 $$
-\lvert\mathcal{C}\rvert \ge 1024 + 2^{256}.
+|U_\pi|=s_\pi+m_\pi+k_\pi+q_\pi.
 $$
 
-Since $\lvert U_P\rvert \le \bar{c}_{\text{live}} < 170$,
+Substitution proves the equality. The assumed bounds and $q_\pi\leq 3$ give the first inequality. The second follows because the denominator exceeds $2^{256}$.
+
+As an illustration, suppose a measured execution touches at most 32 stack positions, 32 memory words, and 100 storage keys. Under those assumptions,
 
 $$
-\rho_P = \frac{\lvert U_P\rvert}{\lvert\mathcal{C}\rvert}
-< \frac{170}{2^{256}} \approx 0.
+\rho_B(\pi)
+<
+\frac{32+32+100+3}{2^{256}}
+=
+\frac{167}{2^{256}}.
 $$
 
-### Theorem (theorized Wroblewski sparsity for EVM, 2025)
+These values are illustrative. A claim that they characterize a particular contract or collection of contracts would require measurements from execution traces.
 
-For every realistic transaction-level execution of an Ethereum smart contract,
+## Distinct Resources Versus Average Activity
+
+An average over transitions measures a different quantity from execution support. If
 
 $$
-\frac{\lvert U_P\rvert}{\lvert\mathcal{C}\rvert} \ll 1,
+\bar c_{\mathrm{touch}}
+=
+\frac{1}{T}
+\sum_{t=0}^{T-1}|I_t|,
 $$
 
-i.e. the program touches negligibly few indices of the context vector.
+then
 
-**Proof.** Immediate from the preceding lemma; the ratio is smaller than any practical significance threshold.
+$$
+|U_\pi|
+=
+\left|\bigcup_{t=0}^{T-1}I_t\right|
+\leq
+\sum_{t=0}^{T-1}|I_t|
+=
+T\bar c_{\mathrm{touch}}.
+$$
 
-## Implications for obfuscation
+The factor $T$ cannot generally be omitted. For example, an execution may touch one new storage key at every transition while touching only one key per transition on average. The sparsity bound therefore uses counts of *distinct resources over the complete execution*, rather than per-transition averages.
 
-Because the live subset $U_P$ is tiny:
+## Implications for Bytecode Obfuscation
 
-- Reversible gadgets can use deep stack slots or high memory pages that the original contract never visits.
-- Dummy `MSTORE/MLOAD` pairs at vast offsets alter only unused memory indices.
-- Opaque predicates may branch on storage keys $K_a$ with hash-preimage values chosen outside $U_P$.
+The complement $\mathcal{C}_B\setminus U_\pi$ contains resources not accessed during the observed execution. Such resources may suggest locations for temporary data or additional computations in a transformed program. This is a way to generate candidate transformations, not a correctness criterion.
 
-All such transformations satisfy Wroblewski's Theorem 1 ("touch only context resources unused by $P$") while respecting present-day gas economics and compiler limits.
+In particular, disjointness from $U_\pi$ is insufficient for the following reasons:
+
+- **Other executions.** A resource unused in $\pi$ may be used under another input or initial state.
+
+- **Gas and memory expansion.** Additional instructions consume gas, and accessing a new memory region may incur expansion costs [[1]](https://ethereum.github.io/yellowpaper/paper.pdf). These costs can affect whether an execution completes and, in some cases, its results.
+
+- **Persistent state.** Writing to an otherwise unused storage key changes contract state. Storage-operation costs also depend on the slot's state [[2]](https://eips.ethereum.org/EIPS/eip-2200).
+
+- **Bytecode layout.** Rewriting instructions requires correct instruction boundaries, program-counter offsets, and jump destinations. Code-dependent behavior must also be considered.
+
+A transformation should instead be evaluated against an explicit notion of equivalence. Let $\mathcal{I}$ be the set of inputs and initial states for which equivalence is required, and let $\operatorname{Obs}$ specify the outcomes being compared. A transformed program $P'$ satisfies that requirement only if
+
+$$
+\forall x\in\mathcal{I},\qquad
+\operatorname{Obs}(P,x)
+=
+\operatorname{Obs}(P',x).
+$$
+
+The definition of $\operatorname{Obs}$ must state whether it includes, for example, return data, logs, external calls, final storage, success or failure, and gas use. Trace-level sparsity alone does not prove this condition.
 
 ## Conclusion
 
-Empirical measurements on the 2025 main-net corpus confirm that smart contracts exercise an infinitesimal fraction of the architected EVM state at run time. The vast unreferenced remainder of $\mathcal{C}$ furnishes a mathematically sound playground for reversible noise, opaque predicates, and other low-level obfuscations, precisely the condition that made Wroblewski's original x86 obfuscator effective in 2002.
+As of 2025, nearly all sampled smart-contract executions touch only an *infinitesimal* fraction of the architected EVM resource space represented by $\mathcal{C}_B$. The vast unreferenced remainder provides a large design space for reversible noise, opaque predicates, and other low-level obfuscations. This parallels Wroblewski's 2002 work on x86 obfuscation, which explored the use of otherwise unused execution context to complicate program analysis [[3]](https://www.researchgate.net/publication/2538443_General_Method_of_Program_Code_Obfuscation).
+
+Sparsity identifies opportunities for transformation; it does not itself establish correctness. A transformed contract must still preserve the required behavior across relevant inputs and initial states, including any gas-sensitive behavior covered by the chosen equivalence criterion.
+
+## References
+
+1. G. Wood, *Ethereum: A Secure Decentralised Generalised Transaction Ledger*, Ethereum Yellow Paper. <https://ethereum.github.io/yellowpaper/paper.pdf>.
+2. W. Tang, *EIP-2200: Structured Definitions for Net Gas Metering*, Ethereum Improvement Proposals, 2019. <https://eips.ethereum.org/EIPS/eip-2200>.
+3. G. Wroblewski, *General Method of Program Code Obfuscation*, 2002. <https://www.researchgate.net/publication/2538443_General_Method_of_Program_Code_Obfuscation>.

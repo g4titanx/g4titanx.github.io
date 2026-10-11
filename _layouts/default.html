@@ -2,8 +2,8 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<title>{% if title %}{{ title }} - {% endif %}g4titan's blog</title>
-<link rel="alternate" type="application/rss+xml" title="g4titan's blog" href="/feed.xml">
+<title>{% if title %}{{ title }} - {% endif %}g4titan.com</title>
+<link rel="alternate" type="application/rss+xml" title="g4titan.com" href="/feed.xml">
 <link rel="stylesheet" type="text/css" href="/assets/css/screen.css" media="screen">
 <link rel="stylesheet" type="text/css" href="/assets/css/code.css" media="screen">
 <link rel="stylesheet" type="text/css" href="/assets/katex/katex.min.css" media="screen">
@@ -12,7 +12,7 @@
 <div id="upper" class="clear">
 <div id="wrap">
 <div id="header">
-<h1><a href="/">g4titan<span>.blog</span></a></h1>
+<h1><a href="/">g4titan<span>.com</span></a></h1>
 </div>
 <button id="theme-toggle" aria-label="Toggle dark mode">dark</button>
 <div id="nav">
@@ -29,7 +29,17 @@
 <li><a href="/library/">Library</a></li>
 {% endif %}
 
+{% if page.url == "/resume/" %}
+<li><span>Resume</span></li>
+{% else %}
+<li><a href="/resume/">Resume</a></li>
+{% endif %}
 
+{% if page.url == "/practice/" %}
+<li><span>Practice</span></li>
+{% else %}
+<li><a href="/practice/">Practice</a></li>
+{% endif %}
 
 </ul>
 </div>
