@@ -29,7 +29,10 @@ title: Home
 </script>
 
 <div id="second">
-<p class="home-quote">writing is the greatest invention of mankind</p>
+
+<h2>Research Interests</h2>
+<p>Intelligent systems and robotics, machine learning and computational models of cognition.</p>
+
 <h2>Posts</h2>
 {% for post in collections.posts %}
 <p><a href="{{ post.url }}">{{ post.data.title }}</a> ({{ post.date | date: "%Y-%m-%d" }})</p>
