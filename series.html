@@ -1,0 +1,17 @@
+---
+layout: default
+pagination:
+  data: collections.postSeries
+  size: 1
+  alias: series
+permalink: "/posts/{{ series.slug }}/index.html"
+eleventyComputed:
+  title: "{{ series.title }}"
+---
+
+<div id="second">
+<h2>{{ series.title }}</h2>
+{% for post in series.posts %}
+<p><a href="{{ post.url }}">{{ post.data.title }}</a> ({{ post.date | date: "%Y-%m-%d" }})</p>
+{% endfor %}
+</div>

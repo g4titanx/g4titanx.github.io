@@ -10,5 +10,9 @@ layout: default
 
 {{ content }}
 
+{% if seriesTitle %}
+<p><a href="{{ page.inputPath | series_url }}">&larr; back to {{ seriesTitle }}</a></p>
+{% else %}
 <p><a href="/">&larr; back home</a></p>
+{% endif %}
 </div>
