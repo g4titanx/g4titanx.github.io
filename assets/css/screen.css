@@ -62,8 +62,10 @@ body {
     
 #wrap {	
 	margin:0 auto;
-	width:700px;
+	width:calc(100% - 32px);
+    max-width:700px;
 	text-align:left; 
+	overflow-wrap:anywhere;
 	}
 	
 #header {
@@ -164,6 +166,18 @@ body {
     display:block;
     max-width:100%;
     height:auto;
+    }
+
+#blog img,
+#second img {
+    max-width:100%;
+    height:auto;
+    }
+
+#blog .katex-display {
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding-bottom:.2em;
     }
 
 .media-page iframe {
@@ -400,4 +414,69 @@ a img {
     padding:2px 8px;
     float:right;
     margin-top:-2.5em;
+    }
+
+@media (max-width:700px) {
+    body {
+        font-size:12px;
+        }
+
+    #upper {
+        padding:24px 0;
+        }
+
+    #theme-toggle {
+        float:none;
+        display:block;
+        margin:12px 0 0 auto;
+        }
+
+    #nav {
+        margin:12px 0 28px;
+        }
+
+    #nav ul {
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:.4em 1em;
+        }
+
+    #nav li {
+        margin:0;
+        }
+
+    #intro {
+        padding:0;
+        margin-bottom:1.5em;
+        }
+
+    #blog {
+        padding:0;
+        }
+
+    #second h2:not(:first-child),
+    #blog h2:not(:first-child) {
+        margin-top:1.8em;
+        }
+
+    #home-l,
+    #home-c,
+    #home-r {
+        float:none;
+        width:auto;
+        margin:0 0 2em;
+        }
+
+    .img-l,
+    .img-r {
+        float:none;
+        width:100%;
+        margin:0 0 1em;
+        }
+
+    .media-page iframe {
+        height:70vh;
+        min-height:400px;
+        }
     }

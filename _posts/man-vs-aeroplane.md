@@ -16,7 +16,6 @@ i beseech you and everyone who is reading this to be progressively and continuou
 
 we saw the need for a machine capable of surpassing the limitations of human speed and we built it, under close observation. we should at this crucial point in history be equivalent in action towards our next stage of evolution.
 
-
 ## references
 
 1. A. M. Turing, *COMPUTING MACHINERY AND INTELLIGENCE*, Mastering the Game. <https://www.computerhistory.org/chess/doc-431614f68ed44/>.
